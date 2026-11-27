@@ -14,13 +14,10 @@ from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder
 
-# ---------- MLflow settings ----------
-# SQLite is used as the backend store: it supports the Model Registry
 mlflow.set_tracking_uri("sqlite:///mlflow.db")
 mlflow.set_experiment("titanic-survival")
 MODEL_NAME = "titanic-survival-model"
 
-# ---------- Data ----------
 df = sns.load_dataset("titanic")
 
 NUM_FEATURES = ["age", "sibsp", "parch", "fare"]
@@ -50,7 +47,6 @@ def build_model(n_estimators, max_depth):
     ])
 
 
-# ---------- Experiment: several runs with different hyperparameters ----------
 param_grid = [
     {"n_estimators": n, "max_depth": d}
     for n in (50, 100, 200)
@@ -73,19 +69,17 @@ for params in param_grid:
             "recall": recall_score(y_test, pred),
         }
 
-        # parameters
         mlflow.log_params(params)
         mlflow.log_param("model_type", "RandomForestClassifier")
         mlflow.log_param("dataset", "titanic")
-        # metrics
+
         mlflow.log_metrics(metrics)
-        # model as an MLflow model
+
         model_info = mlflow.sklearn.log_model(
             model,
             name="model",
             skops_trusted_types=["numpy.dtype", "sklearn.tree._tree.Tree"],
         )
-        # model as a plain file (model.joblib)
         with tempfile.TemporaryDirectory() as tmp:
             path = os.path.join(tmp, "model.joblib")
             joblib.dump(model, path)
@@ -97,11 +91,9 @@ for params in param_grid:
             best.update(f1=metrics["f1_score"], model=model,
                         uri=model_info.model_uri, run_id=run.info.run_id)
 
-# ---------- Save the best model for the FastAPI app ----------
 joblib.dump(best["model"], "model.joblib")
 print(f"\nBest run: {best['run_id']} (f1={best['f1']:.4f}) -> saved to model.joblib")
 
-# ---------- Model Registry ----------
 result = mlflow.register_model(best["uri"], MODEL_NAME)
 client = MlflowClient()
 client.set_registered_model_alias(MODEL_NAME, "champion", result.version)

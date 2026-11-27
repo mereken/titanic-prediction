@@ -100,19 +100,12 @@ and registered in the Model Registry.
 
 **Experiment with all runs**
 
-![MLflow experiment](screenshots/06_mlflow_experiment.png)
+<img src="screenshots/06_mlflow_experiment.png" alt="MLflow experiment" width="700">
 
 **Run details: parameters and metrics**
 
-![MLflow run details](screenshots/07_mlflow_run_details.png)
+<img src="screenshots/07_mlflow_run_details.png" alt="MLflow run details" width="700">
 
-**Run artifacts: model and model.joblib**
-
-![MLflow artifacts](screenshots/08_mlflow_artifacts.png)
-
-**Model Registry: registered model and version**
-
-![MLflow model registry](screenshots/09_mlflow_model_registry.png)
 
 ## FastAPI service
 
@@ -145,18 +138,18 @@ Example response:
 
 ### Screenshots (local run)
 
-![Root endpoint](screenshots/01_api_root.png)
+<img src="screenshots/01_api_root.png" alt="Root endpoint" width="700">
 
-![Swagger UI](screenshots/02_swagger_docs.png)
+<img src="screenshots/02_swagger_docs.png" alt="Swagger UI" width="700">
 
-![Predict endpoint](screenshots/03_predict_swagger.png)
+<img src="screenshots/03_predict_swagger.png" alt="Predict endpoint" width="700">
 
 ## Streamlit frontend
 
 A web form (boarding pass style) that sends the passenger data to the FastAPI `/predict`
 endpoint and shows the survival probability.
 
-![Streamlit app](screenshots/10_streamlit_app.png)
+<img src="screenshots/10_streamlit_app.png" alt="Streamlit app" width="700">
 
 ## How to run
 
@@ -187,9 +180,7 @@ docker run -p 8000:8000 titanic-api
 Another port on your machine can be used by changing the left number,
 e.g. `-p 8080:8000`.
 
-![Docker build](screenshots/04_docker_build.png)
-
-![API running in Docker](screenshots/05_docker_run.png)
+<img src="screenshots/05_docker_run.png" alt="API running in Docker" width="700">
 
 ### 3. With Docker Compose (API + Streamlit)
 

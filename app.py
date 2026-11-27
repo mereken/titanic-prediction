@@ -6,7 +6,6 @@ from pathlib import Path
 import requests
 import streamlit as st
 
-# Address of the FastAPI service (can be overridden with an environment variable)
 API_URL = os.getenv("API_URL", "http://localhost:8000/predict")
 BASE_DIR = Path(__file__).parent
 
@@ -22,7 +21,6 @@ st.set_page_config(
 )
 
 
-# ---------- Background image ----------
 @st.cache_data
 def load_background(filename: str) -> str:
     path = BASE_DIR / "assets" / filename
@@ -35,7 +33,6 @@ bg = load_background("background.jpg")
 bg_css = f"url(data:image/jpeg;base64,{bg})" if bg else "none"
 st.markdown(f"<style>:root {{ --bg-image: {bg_css}; }}</style>", unsafe_allow_html=True)
 
-# ---------- Styling ----------
 st.markdown(
         html("""
     <style>
@@ -144,10 +141,8 @@ st.markdown(
         unsafe_allow_html=True,
     )
 
-# ---------- Boarding pass form ----------
 CLASSES = {1: "1st class", 2: "2nd class", 3: "3rd class"}
 PORTS = {"S": "Southampton", "C": "Cherbourg", "Q": "Queenstown"}
-# Typical (median) ticket prices in the dataset, in pounds
 TYPICAL_FARE = {1: 60, 2: 14, 3: 8}
 
 
@@ -192,7 +187,6 @@ with st.container(border=True, key="boarding"):
 
     predict = st.button("Check my fate", type="primary", icon=":material/anchor:")
 
-# ---------- Prediction ----------
 if predict:
     payload = {
         "pclass": int(pclass),
@@ -211,7 +205,7 @@ if predict:
             result = response.json()
         except requests.exceptions.RequestException as exc:
             error = exc
-        time.sleep(0.7)  # short pause so the loading indicator is visible
+        time.sleep(0.7)  
 
     if error:
         st.error(
